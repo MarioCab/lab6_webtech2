@@ -38,7 +38,7 @@ def internal_server_error(error):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    """"Handles GET and POST requests for login
+    """ "Handles GET and POST requests for login
         GET: Returns the login page
         POST: Authenticates the user data specified in the JSON payload
 
@@ -68,7 +68,7 @@ def logout():
     session["logged_in"] = False
     return redirect(url_for("home"))
 
-    
+
 @app.route("/")
 @app.route("/index")
 def home():
@@ -82,7 +82,7 @@ def home():
 
 @app.route("/product")
 def product_list():
-    """Returns a page listing all products of the category specified 
+    """Returns a page listing all products of the category specified
         as query string parameter
 
     Returns:
@@ -107,10 +107,33 @@ def product_list():
 
     return render_template(
         "product_list.jinja",
-        category_name = category_name,
-        categories = categories,
-        products = products
+        category_name=category_name,
+        categories=categories,
+        products=products,
     )
+
+
+@app.route("/delete_category", methods=["POST"])
+def delete_category():
+    """Removes a category from the database
+
+    Returns:
+        Response: an error message if the category cannot be deleted because it contains products.
+    """
+    if "logged_in" not in session or not session["logged_in"]:
+        return redirect(url_for("login"))
+
+    category_id = request.form["category_id"]
+    products = ProductsTable.get_by_category_id(category_id)
+    if products:
+        error = "The category cannot be deleted since it contains products."
+        categories = CategoriesTable.get()
+        return render_template(
+            "category_list.jinja", categories=categories, error=error
+        )
+
+    CategoriesTable.delete(category_id)
+    return redirect(url_for("category_list"))
 
 
 @app.route("/delete_product", methods=["POST"])
@@ -142,10 +165,8 @@ def category_list():
         return redirect(url_for("login"))
 
     categories = CategoriesTable.get()
-    return render_template(
-        "category_list.jinja", 
-        categories=categories
-    )
+    error = request.args.get("error")
+    return render_template("category_list.jinja", categories=categories, error=error)
 
 
 @app.route("/customer")
@@ -167,7 +188,7 @@ def close_connection(exception):
     """Closes the database connection
 
     Args:
-        exception (sqlite3.Error): The error raised if the close operation fails; 
+        exception (sqlite3.Error): The error raised if the close operation fails;
             Otherwise, None.
     """
     close_db()
