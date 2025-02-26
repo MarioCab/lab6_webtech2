@@ -152,7 +152,7 @@ def delete_product():
     return redirect(url_for("product_list", category_id=category_id))
 
 
-@app.route("/category")
+@app.route("/category", methods=["GET", "POST"])
 def category_list():
     """Handles GET and POST requests for category
         GET: Returns a page listing all categories
@@ -163,6 +163,25 @@ def category_list():
     """
     if "logged_in" not in session or not session["logged_in"]:
         return redirect(url_for("login"))
+
+    if request.method == "POST":
+        category_name = request.form["category_name"]
+        if not category_name:
+            emptyError = "Category name cannot be empty."
+            categories = CategoriesTable.get()
+            return render_template(
+                "category_list.jinja", categories=categories, emptyError=emptyError
+            )
+        elif CategoriesTable.get_by_name(category_name):
+            existsError = "Category name exists already."
+            categories = CategoriesTable.get()
+            return render_template(
+                "category_list.jinja", categories=categories, existsError=existsError
+            )
+        else:
+            category_data = {"category_name": category_name}
+            CategoriesTable.insert(category_data)
+            return redirect(url_for("category_list"))
 
     categories = CategoriesTable.get()
     error = request.args.get("error")

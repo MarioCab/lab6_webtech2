@@ -2,7 +2,7 @@
 
 {% block content %}
 <main>
-    <h2>Category List</h2>
+    <h2 style=font-weight: bold;>Category List</h2>
 
     <!-- display a table of categories -->
     {% if categories %}
@@ -27,13 +27,37 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+
     {% else %}
         <div> There are no categories.</div>
     {% endif %}
 
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
+
+        <div>
+        <h2 style=font-weight: bold;">Add Category</h2>
+        <form method="post" action="{{ url_for('category_list') }}">
+            <div class="form-group row">
+                <label for="category_name" class="col-sm-1">Name:</label>
+                <div class="col-sm-1">
+                    <input type="text" id="category_name" name="category_name">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Add Category</button>
+        </form>
+    </div>
+
+        {% if emptyError %}
+            <p style="color: red;">{{ emptyError }}</p>
+        {% endif %}
+
+        {% if existsError %}
+            <p style="color: red;">{{ existsError }}</p>
+        {% endif %}
+
 
     <div class="mt-5">
         <a href="{{ url_for('product_list') }}" class="btn btn-primary">View Product List</a>
