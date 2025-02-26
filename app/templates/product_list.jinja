@@ -1,0 +1,59 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+<main>
+    <h2>Product List</h2>
+
+    <div class="row g-5">
+        <div class="col-md-4">
+            <!-- display a list of categories -->
+            <h3>Categories</h3>
+            {% for category in categories %}
+                <div class="block">
+                <a href="{{ url_for('product_list', category_id=category.CategoryID) }}" class="m-2 w-50 btn btn-secondary">
+                    {{ category.CategoryName }}
+                </a>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-8">
+        <!-- display a table of products -->
+            <h3> {{ category_name }} </h3>
+            {% if products %}
+            <table class="table table-striped w-auto">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th class="right">Price</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ product.ProductCode }}</td>
+                        <td>{{ product.ProductName }}</td>
+                        <td class="right">{{ '%.2f'|format(product.Price) }}</td>
+                        <td>
+                            <form method="post" action="{{ url_for('delete_product') }}">
+                                <input name="product_id" type="hidden" value="{{ product.ProductID }}">
+                                <input name="category_id" type="hidden" value="{{ product.CategoryID }}">
+                                <input type="submit" class="btn btn-secondary" value="Delete">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <div> There are not products in this category.</div>
+            {% endif %} 
+        </div>
+        <div>
+            <a href="{{ url_for('category_list') }}" class="btn btn-primary">Manage Categories</a>
+        </div>
+    </div>
+</main>
+{% endblock %}

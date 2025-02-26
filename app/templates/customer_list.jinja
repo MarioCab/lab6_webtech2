@@ -1,0 +1,29 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+<main>
+    <h2>Customer List</h2>
+
+    <div class="row g-5">
+        <div class="col-md-4">
+            <!-- display a list of customers -->
+            <h3>Customers</h3>
+            <div class="scroll">
+                {% for customer in customers %}
+                    <div>
+                        {{ customer.LastName }}, {{ customer.FirstName }}
+                        {% if customer.PreferredName %}
+                            ({{ customer.PreferredName }})
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    
+        <div class="col-md-8">
+            <h3>Name of Selected Customer</h3>
+        Data of selected customer
+        </div>
+    </div>
+</main>
+{% endblock %}

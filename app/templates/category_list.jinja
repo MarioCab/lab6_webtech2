@@ -1,0 +1,37 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+<main>
+    <h2>Category List</h2>
+
+    <!-- display a table of categories -->
+    {% if categories %}
+        <table class="table table-striped w-auto">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                <tr>
+                    <td>{{ category.CategoryName }}</td>
+                    <td>
+                        <form method="get">
+                            <input type="submit" class="btn btn-secondary" value="Delete">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div> There are no categories.</div>
+    {% endif %}
+
+    <div class="mt-5">
+        <a href="{{ url_for('product_list') }}" class="btn btn-primary">View Product List</a>
+    </div>
+</main>
+{% endblock %}

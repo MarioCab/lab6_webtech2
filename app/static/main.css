@@ -1,0 +1,17 @@
+/* the styles for classes */
+.closebutton {
+    margin-left: 15px;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+.closebutton:hover {
+    color: rgb(140, 140, 140);
+}
+.scroll {
+    max-height: 300px;
+    overflow: auto;
+}
