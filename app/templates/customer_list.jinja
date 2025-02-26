@@ -11,18 +11,40 @@
             <div class="scroll">
                 {% for customer in customers %}
                     <div>
-                        {{ customer.LastName }}, {{ customer.FirstName }}
-                        {% if customer.PreferredName %}
-                            ({{ customer.PreferredName }})
-                        {% endif %}
+                        <a href="{{ url_for('customer_list', customer_id=customer.CustomerID) }}" style="text-decoration: none; color: orange; font-weight: bold;font-size: 1.25em">
+                            {{ customer.LastName }}, 
+                            {% if customer.PreferredName %}
+                                {{ customer.PreferredName }}
+                            {% else %}
+                                {{ customer.FirstName }}
+                            {% endif %}
+                        </a>
                     </div>
                 {% endfor %}
             </div>
         </div>
     
         <div class="col-md-8">
-            <h3>Name of Selected Customer</h3>
-        Data of selected customer
+            <h3 style="color: orange; font-weight: bold; font-size: 2em">{{ selected_customer.FirstName }} {{ selected_customer.LastName }}</h3>
+            <p style="font-size: 1.5em"><strong>Preferred Name:</strong> 
+                {% if selected_customer.PreferredName %}
+                    {{ selected_customer.PreferredName }}
+                {% else %}
+                    <em>No preferred name on file</em>
+                {% endif %}
+            </p>
+            <p style="font-size: 1.5em"><strong>Phone:</strong> 
+                {% if selected_customer.Phone %}
+                    {{ selected_customer.Phone }}
+                {% else %}
+                    <em>No phone number on file</em>
+                {% endif %}
+            </p>
+            <p style="font-size: 1.5em"><strong>Email:</strong> {{ selected_customer.Email }}</p>
+            <p style="font-size: 1.5em"><strong>Address:</strong> {{ selected_customer.Address }}</p>
+            <p style="font-size: 1.5em"><strong>City:</strong> {{ selected_customer.City }}</p>
+            <p style="font-size: 1.5em"><strong>State:</strong> {{ selected_customer.State }}</p>
+            <p style="font-size: 1.5em"><strong>Zip:</strong> {{ selected_customer.Zip }}</p>
         </div>
     </div>
 </main>

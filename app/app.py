@@ -199,7 +199,12 @@ def customer_list():
         return app.redirect(url_for("login"))
 
     customers = CustomersTable.get()
-    return render_template("customer_list.jinja", customers=customers)
+    selected_customer_id = request.args.get("customer_id", customers[0]["CustomerID"])
+    selected_customer = CustomersTable.get_by_id(selected_customer_id)
+
+    return render_template(
+        "customer_list.jinja", customers=customers, selected_customer=selected_customer
+    )
 
 
 @app.teardown_appcontext
